@@ -1,0 +1,244 @@
+---
+title: "Chapter 12 Notes"
+subtitle: "mutate() and case_when()"
+author: "Lorraine"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    embed-resources: true
+---
+
+
+
+# Quarto Notes
+
+```text
+{r} expression
+```
+
+
+
+```{r}
+# ⚡ Type this in a Quarto code chunk
+library(dplyr)
+subset_six_cyl <- mtcars %>% 
+  filter(cyl == 6) %>% 
+  nrow()
+```
+
+
+The filtered dataset has `{r} subset_six_cyl` six cylinder cars. 
+
+```{r}
+subset_six_cyl
+```
+
+
+# Load Packages
+
+```{r}
+library(dslabs)  # Data science labs package
+library(dplyr)   # Data manipulation package
+```
+
+
+# Vectorized Conditionals
+
+
+```{r}
+# 📖 Review
+## Create vector x
+# ⚡ Type this in a Quarto code chunk: 
+x <- c(3, 2, 3, 6, 5)
+## logical vector
+x > 3
+```
+
+
+```{r}
+# 📖 Review
+## logical subsetting
+x[x > 3]
+```
+
+
+```{r}
+# 📖 Review
+## replaces values
+x[x > 3] <- 99
+## ✅  print result
+x
+```
+
+
+
+## ifelse()
+
+```{r}
+# ⚡ Type this in a Quarto code chunk: 
+ifelse(test = x > 3, yes = "Large", no = "Small")
+```
+
+
+
+## case_when()
+
+
+```{r}
+# ⚡ Type this in a Quarto code chunk: 
+case_when(c(3, 2, 3, 6, 5) > 3 ~ "Large", .default = "Small")
+```
+
+
+## More than Two Categories
+
+```{r}
+# ✅  Setup
+# ⚡ Type this in a Quarto code chunk: 
+scores <- c(55, 65, 75, 85, 95)
+```
+
+### Nested ifelse()
+
+```{r}
+# ⚡ Type this in a Quarto code chunk: 
+ifelse(scores < 60, "Low",
+       ifelse(scores < 80, "Medium", "High"))
+```
+
+
+### Multiple Rule case_when()
+
+
+
+```{r}
+# ⚡ Type this in a Quarto code chunk:
+case_when(scores < 60 ~ "Low",
+          scores < 80 ~ "Medium",
+          TRUE        ~ "High")
+```
+
+
+# mutate()
+
+
+
+```{r}
+# ✅  Pre-Check
+names(mtcars) # Check the column names
+```
+
+## Column Copy
+
+```{r}
+# ⚡ Type this in a Quarto code chunk:
+mtcars2 <- mtcars %>% 
+  mutate(new_column_copy = am)
+```
+
+```{r}
+# ✅ Verify
+names(mtcars2) # Check the column names again
+```
+
+### mutate() with Arithmetic
+
+
+```{r}
+# ✅  Setup
+measurements <- data.frame(height_in = c(60, 65, 70))
+measurements
+```
+
+🗣 The `measurements` data frame has one column: `{r} colnames(measurements)`.
+
+```{r}
+# ⚡ Type this in a Quarto code chunk:
+measurements <- measurements %>%
+  mutate(height_cm = height_in * 2.54)
+```
+
+🗣 The `measurements` data frame now has `{r} ncol(measurements)` column: `{r} colnames(measurements)`.
+
+### case_when() inside mutate()
+
+```{r}
+# ✅  Setup
+student_scores <- data.frame(scores = c(55, 68, 72, 83, 91))
+```
+
+
+```{r}
+# ⚡ Type this in a Quarto code chunk:
+student_scores <- student_scores %>%
+  mutate(
+    score_level = case_when(
+      scores < 60 ~ "Low",
+      scores < 80 ~ "Medium",
+      TRUE        ~ "High"
+    )
+  )
+```
+
+
+```{r}
+# ✅ Verify
+head(student_scores)
+```
+
+🗣 `student_scores` has the columns `{r} paste(names(student_scores), collapse = " and ")`.
+
+
+🗣 `student_scores` has the columns `{r} paste(names(student_scores), collapse = "and")`.
+
+## Overwrite Column Values
+
+```{r}
+# ✅  Pre-check
+unique(mtcars$am) 
+```
+
+```{r}
+# ⚡ Type this in a Quarto code chunk:
+cars_overwrite <- mtcars %>%
+  mutate(
+    am = case_when(
+      am == 0 ~ "Automatic", 
+      TRUE ~ "Manual")
+    )
+```
+
+```{r}
+# ✅ Verify:
+unique(cars_overwrite$am)
+```
+
+🗣 The `am` column in `cars_overwrite` has the unique values: `{r} unique(cars_overwrite$am)`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
